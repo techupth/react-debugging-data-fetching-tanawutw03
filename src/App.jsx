@@ -6,10 +6,13 @@ function App() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const fetchData = () => {
+    // มี await ต้องมี async เสมอ
+    const fetchData = async () => {
       try {
-        const response = await axios.get("https://dummyjson.com/products");
-        setProducts(response.data.data);
+        const response = await axios.get("https://dummyjson.com/products"); // เอา url ไปลองเปิดใน browser เพื่อเช็ค endpoint ได้ ว่าเรา access ได้ไหม
+        // console.log(response);
+        // เพราะใน data ที่ส่งกลับมามี nested objects products ที่เป็น array of objects จึงต้องใช้ response.data.products แทน response.data.data
+        setProducts(response.data.products);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -26,7 +29,8 @@ function App() {
             <h2>{product.title}</h2>
             <p>Description: {product.description}</p>
             <p>Price: ${product.price}</p>
-            <img src={product.picture} alt={product.title} />
+            {/* แก้จาก products.picture เป็น product.thumbnail อ้างอิงตาม key ที่ res กลับมา */}
+            <img src={product.thumbnail} alt={product.title} />
           </div>
         ))}
       </div>
